@@ -1,6 +1,6 @@
 package com.bookify.entity;
 
-import com.bookify.enums.SeatCategory;
+import com.bookify.enums.BookingStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -17,33 +18,27 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(
-        name = "seats",
-        uniqueConstraints = {
-                @UniqueConstraint(
-                        name = "uk_seats_screen_id_row_id_number",
-                        columnNames = {"screen_id", "row_id", "number"}
-                )
-        })
-public class Seat {
+@Table(name = "bookings")
+public class Booking {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(nullable = false, length = 1)
-    private String rowId;
-
-    @Column(nullable = false)
-    private Short number;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "screen_id", nullable = false)
-    private Screen screen;
+    @JoinColumn(name = "show_id", nullable = false)
+    private Show show;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private SeatCategory seatCategory;
+    private BookingStatus bookingStatus;
+
+    @Column(nullable = false, precision = 10, scale = 2)
+    private BigDecimal totalAmount;
 
     @CreationTimestamp
     @Column(nullable = false, updatable = false)

@@ -27,7 +27,7 @@ public class Show {
     private LocalDateTime showTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "screen_id",  nullable = false)
+    @JoinColumn(name = "screen_id", nullable = false)
     private Screen screen;
 
     @ManyToOne(fetch = FetchType.LAZY)
