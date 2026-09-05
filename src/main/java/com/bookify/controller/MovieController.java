@@ -41,7 +41,7 @@ public class MovieController {
                 .updatedAt(savedMovie.getUpdatedAt())
                 .build();
 
-        return new ResponseEntity<>(movieResponse, HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED).body(movieResponse);
     }
 
     @GetMapping("/{id}")

@@ -40,7 +40,7 @@ public class VenueController {
                 .updatedAt(savedVenue.getUpdatedAt())
                 .build();
 
-        return new ResponseEntity<>(venueResponse, HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED).body(venueResponse);
     }
 
     @GetMapping("/{id}")
@@ -49,15 +49,17 @@ public class VenueController {
             return ResponseEntity.badRequest().build();
         }
 
-        Optional<Venue> venue = venueService.getVenue(id);
+        Optional<Venue> venueOptional = venueService.getVenue(id);
 
-        if(venue.isPresent()) {
+        if(venueOptional.isPresent()) {
+            Venue venue = venueOptional.get();
+
             VenueResponse venueResponse = VenueResponse
                     .builder()
-                    .name(venue.get().getName())
-                    .city(venue.get().getCity())
-                    .createdAt(venue.get().getCreatedAt())
-                    .updatedAt(venue.get().getUpdatedAt())
+                    .name(venue.getName())
+                    .city(venue.getCity())
+                    .createdAt(venue.getCreatedAt())
+                    .updatedAt(venue.getUpdatedAt())
                     .build();
 
             return ResponseEntity.ok(venueResponse);
