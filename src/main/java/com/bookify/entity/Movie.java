@@ -23,17 +23,17 @@ public class Movie {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false, length = 100)
     private String title;
 
     @Column(nullable = false)
-    private int duration_minutes;
+    private Short durationMinutes;
 
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
-    private LocalDateTime created_at;
+    private LocalDateTime createdAt;
 
     @UpdateTimestamp
     @Column(nullable = false)
-    private LocalDateTime updated_at;
+    private LocalDateTime updatedAt;
 }
