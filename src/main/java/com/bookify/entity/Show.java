@@ -1,6 +1,5 @@
 package com.bookify.entity;
 
-import com.bookify.enums.SeatCategory;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,31 +16,23 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "seats", uniqueConstraints = {
-        @UniqueConstraint(
-                name = "uk_seats_screen_id_row_id_number",
-                columnNames = {"screen_id", "row_id", "number"}
-        )
-})
-public class Seat {
+@Table(name = "shows")
+public class Show {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(nullable = false, length = 1)
-    private String rowId;
-
     @Column(nullable = false)
-    private Short number;
+    private LocalDateTime showTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "screen_id", nullable = false)
+    @JoinColumn(name = "screen_id",  nullable = false)
     private Screen screen;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private SeatCategory seatCategory;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "movie_id", nullable = false)
+    private Movie movie;
 
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
@@ -50,4 +41,5 @@ public class Seat {
     @UpdateTimestamp
     @Column(nullable = false)
     private LocalDateTime updatedAt;
+
 }

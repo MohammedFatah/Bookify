@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -17,37 +18,29 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "seats", uniqueConstraints = {
-        @UniqueConstraint(
-                name = "uk_seats_screen_id_row_id_number",
-                columnNames = {"screen_id", "row_id", "number"}
-        )
-})
-public class Seat {
+@Table(name = "show_category_prices")
+public class ShowCategoryPrice {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(nullable = false, length = 1)
-    private String rowId;
-
-    @Column(nullable = false)
-    private Short number;
-
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "screen_id", nullable = false)
-    private Screen screen;
+    @JoinColumn(name = "show_id", nullable = false)
+    private Show show;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private SeatCategory seatCategory;
 
+    @Column(nullable = false)
+    private BigDecimal price;
+
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+    private LocalDateTime createAt;
 
     @UpdateTimestamp
     @Column(nullable = false)
-    private LocalDateTime updatedAt;
+    private LocalDateTime updateAt;
 }
