@@ -16,8 +16,8 @@ public class VenueService {
         this.venueRepository = venueRepository;
     }
 
-    public void addVenue(Venue venue) {
-        venueRepository.save(venue);
+    public Venue addVenue(Venue venue) {
+        return venueRepository.save(venue);
     }
 
     public Optional<Venue> getVenue(UUID id) {

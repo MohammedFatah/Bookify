@@ -4,6 +4,7 @@ import com.bookify.dto.VenueRequest;
 import com.bookify.dto.VenueResponse;
 import com.bookify.entity.Venue;
 import com.bookify.service.VenueService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,23 +23,27 @@ public class VenueController {
     }
 
     @PostMapping
-    public ResponseEntity<String> addVenue(@RequestBody VenueRequest venueRequest) {
-
-        if (venueRequest.getName() == null || venueRequest.getCity() == null) {
-            return ResponseEntity.badRequest().build();
-        }
-
+    public ResponseEntity<VenueResponse> addVenue(@Valid @RequestBody VenueRequest venueRequest) {
         Venue venue = Venue.builder()
                 .name(venueRequest.getName())
                 .city(venueRequest.getCity())
                 .build();
 
-        venueService.addVenue(venue);
+        Venue savedVenue = venueService.addVenue(venue);
 
-        return new ResponseEntity<>("Venue added successfully", HttpStatus.ACCEPTED);
+        VenueResponse venueResponse = VenueResponse
+                .builder()
+                .id(savedVenue.getId())
+                .name(savedVenue.getName())
+                .city(savedVenue.getCity())
+                .createdAt(savedVenue.getCreatedAt())
+                .updatedAt(savedVenue.getUpdatedAt())
+                .build();
+
+        return new ResponseEntity<>(venueResponse, HttpStatus.CREATED);
     }
 
-    @GetMapping("/${id}")
+    @GetMapping("/{id}")
     public ResponseEntity<VenueResponse> getVenue(@PathVariable UUID id) {
         if(id == null) {
             return ResponseEntity.badRequest().build();
