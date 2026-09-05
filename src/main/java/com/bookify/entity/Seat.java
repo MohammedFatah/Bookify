@@ -17,11 +17,13 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "seats", uniqueConstraints = {
-        @UniqueConstraint(
-                name = "uk_seats_screen_id_row_id_number",
-                columnNames = {"screen_id", "row_id", "number"}
-        )
+@Table(
+        name = "seats",
+        uniqueConstraints = {
+            @UniqueConstraint(
+                    name = "uk_seats_screen_id_row_id_number",
+                    columnNames = {"screen_id", "row_id", "number"}
+            )
 })
 public class Seat {
 

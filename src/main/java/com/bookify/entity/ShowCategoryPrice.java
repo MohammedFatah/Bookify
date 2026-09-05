@@ -18,7 +18,15 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "show_category_prices")
+@Table(
+        name = "show_category_prices",
+        uniqueConstraints = {
+                @UniqueConstraint(
+                        name = "uk_show_category_price_show_id_seat_category",
+                        columnNames = {"show_id", "seat_category"}
+                )
+        }
+)
 public class ShowCategoryPrice {
 
     @Id
@@ -33,7 +41,7 @@ public class ShowCategoryPrice {
     @Column(nullable = false)
     private SeatCategory seatCategory;
 
-    @Column(nullable = false)
+    @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal price;
 
     @CreationTimestamp
