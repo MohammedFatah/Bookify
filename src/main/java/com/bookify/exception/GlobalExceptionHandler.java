@@ -20,7 +20,9 @@ public class GlobalExceptionHandler {
                 .message(ex.getMessage())
                 .build();
 
-        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(errorResponse);
     }
 
 }

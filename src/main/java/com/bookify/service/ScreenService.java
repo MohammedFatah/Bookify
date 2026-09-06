@@ -7,7 +7,6 @@ import com.bookify.repository.ScreenRepository;
 import com.bookify.repository.VenueRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -28,8 +27,9 @@ public class ScreenService {
         return screenRepository.save(screen);
     }
 
-    public Optional<Screen> getScreen(UUID id) {
-        return screenRepository.findById(id);
+    public Screen getScreen(UUID id) {
+        return screenRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Screen: " + id + " not found"));
     }
 
 }

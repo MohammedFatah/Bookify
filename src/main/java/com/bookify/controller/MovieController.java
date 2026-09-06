@@ -9,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -41,7 +40,9 @@ public class MovieController {
                 .updatedAt(savedMovie.getUpdatedAt())
                 .build();
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(movieResponse);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(movieResponse);
     }
 
     @GetMapping("/{id}")
@@ -50,22 +51,19 @@ public class MovieController {
             return ResponseEntity.badRequest().build();
         }
 
-        Optional<Movie> movieOptional = movieService.getMovie(id);
+        Movie movie = movieService.getMovie(id);
 
-        if(movieOptional.isPresent()) {
-            Movie movie =  movieOptional.get();
+        MovieResponse movieResponse = MovieResponse
+                .builder()
+                .id(movie.getId())
+                .title(movie.getTitle())
+                .durationMinutes(movie.getDurationMinutes())
+                .createdAt(movie.getCreatedAt())
+                .updatedAt(movie.getUpdatedAt())
+                .build();
 
-            MovieResponse movieResponse = MovieResponse
-                    .builder()
-                    .id(movie.getId())
-                    .title(movie.getTitle())
-                    .durationMinutes(movie.getDurationMinutes())
-                    .createdAt(movie.getCreatedAt())
-                    .updatedAt(movie.getUpdatedAt())
-                    .build();
-            return ResponseEntity.ok(movieResponse);
-        }
-
-        return ResponseEntity.notFound().build();
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(movieResponse);
     }
 }

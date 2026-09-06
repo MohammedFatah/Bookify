@@ -9,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -40,32 +39,30 @@ public class VenueController {
                 .updatedAt(savedVenue.getUpdatedAt())
                 .build();
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(venueResponse);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(venueResponse);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<VenueResponse> getVenue(@PathVariable UUID id) {
-        if(id == null) {
+        if (id == null) {
             return ResponseEntity.badRequest().build();
         }
 
-        Optional<Venue> venueOptional = venueService.getVenue(id);
+        Venue venue = venueService.getVenue(id);
 
-        if(venueOptional.isPresent()) {
-            Venue venue = venueOptional.get();
+        VenueResponse venueResponse = VenueResponse
+                .builder()
+                .name(venue.getName())
+                .city(venue.getCity())
+                .createdAt(venue.getCreatedAt())
+                .updatedAt(venue.getUpdatedAt())
+                .build();
 
-            VenueResponse venueResponse = VenueResponse
-                    .builder()
-                    .name(venue.getName())
-                    .city(venue.getCity())
-                    .createdAt(venue.getCreatedAt())
-                    .updatedAt(venue.getUpdatedAt())
-                    .build();
-
-            return ResponseEntity.ok(venueResponse);
-        }
-
-        return ResponseEntity.notFound().build();
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(venueResponse);
     }
 
 }

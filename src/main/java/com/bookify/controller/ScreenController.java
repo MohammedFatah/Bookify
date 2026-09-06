@@ -3,14 +3,12 @@ package com.bookify.controller;
 import com.bookify.dto.ScreenRequest;
 import com.bookify.dto.ScreenResponse;
 import com.bookify.entity.Screen;
-import com.bookify.entity.Venue;
 import com.bookify.service.ScreenService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -43,7 +41,9 @@ public class ScreenController {
                 .venue(savedScreen.getVenue())
                 .build();
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(screenResponse);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(screenResponse);
     }
 
     @GetMapping("{id}")
@@ -52,23 +52,20 @@ public class ScreenController {
             return ResponseEntity.badRequest().build();
         }
 
-        Optional<Screen> screenOptional = screenService.getScreen(id);
+        Screen screen = screenService.getScreen(id);
 
-        if (screenOptional.isPresent()) {
-            Screen screen = screenOptional.get();
+        ScreenResponse screenResponse = ScreenResponse
+                .builder()
+                .id(screen.getId())
+                .name(screen.getName())
+                .type(screen.getType())
+                .capacity(screen.getCapacity())
+                .venue(screen.getVenue())
+                .build();
 
-            ScreenResponse screenResponse = ScreenResponse
-                    .builder()
-                    .id(screen.getId())
-                    .name(screen.getName())
-                    .type(screen.getType())
-                    .capacity(screen.getCapacity())
-                    .venue(screen.getVenue())
-                    .build();
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(screenResponse);
 
-            return ResponseEntity.ok(screenResponse);
-        }
-
-        return ResponseEntity.notFound().build();
     }
 }

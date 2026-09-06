@@ -1,10 +1,10 @@
 package com.bookify.service;
 
 import com.bookify.entity.Venue;
+import com.bookify.exception.ResourceNotFoundException;
 import com.bookify.repository.VenueRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -20,8 +20,9 @@ public class VenueService {
         return venueRepository.save(venue);
     }
 
-    public Optional<Venue> getVenue(UUID id) {
-        return venueRepository.findById(id);
+    public Venue getVenue(UUID id) {
+        return venueRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Venue: " + id + " not found"));
     }
 
 }
