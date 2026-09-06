@@ -16,6 +16,6 @@ public class MovieResponse {
     private UUID id;
     private String title;
     private Short durationMinutes;
-    private LocalDateTime  createdAt;
+    private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

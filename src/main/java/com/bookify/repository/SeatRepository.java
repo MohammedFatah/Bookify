@@ -8,5 +8,5 @@ import java.util.UUID;
 
 @Repository
 public interface SeatRepository extends JpaRepository<Seat, UUID> {
-
+    boolean existsByScreenIdAndRowIdAndNumber(UUID screenId, String rowId, Short number);
 }
