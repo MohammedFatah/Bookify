@@ -22,14 +22,14 @@ public class ScreenService {
 
     public Screen addScreen(Screen screen, UUID venueId) {
         Venue venue = venueRepository.findById(venueId)
-                .orElseThrow(() -> new ResourceNotFoundException("Venue: " + venueId + " not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Venue", venueId));
         screen.setVenue(venue);
         return screenRepository.save(screen);
     }
 
     public Screen getScreen(UUID id) {
         return screenRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Screen: " + id + " not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Screen", id));
     }
 
 }

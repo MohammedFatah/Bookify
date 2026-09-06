@@ -2,6 +2,7 @@ package com.bookify.controller;
 
 import com.bookify.dto.ScreenRequest;
 import com.bookify.dto.ScreenResponse;
+import com.bookify.dto.VenueSummary;
 import com.bookify.entity.Screen;
 import com.bookify.service.ScreenService;
 import jakarta.validation.Valid;
@@ -32,13 +33,19 @@ public class ScreenController {
 
         Screen savedScreen = screenService.addScreen(screen, screenRequest.getVenueId());
 
+        VenueSummary venueSummary = VenueSummary
+                .builder()
+                .id(savedScreen.getVenue().getId())
+                .name(savedScreen.getVenue().getName())
+                .build();
+
         ScreenResponse screenResponse = ScreenResponse
                 .builder()
                 .id(savedScreen.getId())
                 .name(savedScreen.getName())
                 .type(savedScreen.getType())
                 .capacity(savedScreen.getCapacity())
-                .venue(savedScreen.getVenue())
+                .venue(venueSummary)
                 .build();
 
         return ResponseEntity
@@ -54,13 +61,19 @@ public class ScreenController {
 
         Screen screen = screenService.getScreen(id);
 
+        VenueSummary venueSummary = VenueSummary
+                .builder()
+                .id(screen.getVenue().getId())
+                .name(screen.getVenue().getName())
+                .build();
+
         ScreenResponse screenResponse = ScreenResponse
                 .builder()
                 .id(screen.getId())
                 .name(screen.getName())
                 .type(screen.getType())
                 .capacity(screen.getCapacity())
-                .venue(screen.getVenue())
+                .venue(venueSummary)
                 .build();
 
         return ResponseEntity

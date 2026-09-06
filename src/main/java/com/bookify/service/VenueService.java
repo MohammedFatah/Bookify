@@ -22,7 +22,7 @@ public class VenueService {
 
     public Venue getVenue(UUID id) {
         return venueRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Venue: " + id + " not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Venue", id));
     }
 
 }

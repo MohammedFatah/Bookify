@@ -22,7 +22,7 @@ public class MovieService {
 
     public Movie getMovie(UUID id) {
         return movieRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Movie: " + id + " not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Movie", id));
     }
 
 }

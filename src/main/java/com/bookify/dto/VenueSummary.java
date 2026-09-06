@@ -1,7 +1,5 @@
 package com.bookify.dto;
 
-import com.bookify.entity.Venue;
-import com.bookify.enums.ScreenType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,10 +11,7 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ScreenResponse {
+public class VenueSummary {
     private UUID id;
     private String name;
-    private ScreenType type;
-    private Short capacity;
-    private VenueSummary venue;
 }
