@@ -81,4 +81,17 @@ public class ScreenController {
                 .body(screenResponse);
 
     }
+
+    @PostMapping("/{id}/seats/generate")
+    public ResponseEntity<ScreenResponse> generateSeatsForScreen(@PathVariable UUID id) {
+        if (id == null) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        screenService.generateSeatsForScreen(id, 20);
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(null);
+    }
 }

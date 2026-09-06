@@ -6,6 +6,7 @@ import com.bookify.exception.ResourceAlreadyExistsException;
 import com.bookify.exception.ResourceNotFoundException;
 import com.bookify.repository.ScreenRepository;
 import com.bookify.repository.SeatRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -21,6 +22,7 @@ public class SeatService {
         this.screenRepository = screenRepository;
     }
 
+    @Transactional
     public Seat addSeat(Seat seat, UUID screenId) {
         boolean seatAlreadyExists = seatRepository.existsByScreenIdAndRowIdAndNumber(screenId, seat.getRowId(), seat.getNumber());
 
@@ -33,7 +35,14 @@ public class SeatService {
 
         seat.setScreen(screen);
 
-        return seatRepository.save(seat);
+        Seat savedSeat = seatRepository.save(seat);
+
+        long capacity = seatRepository.countByScreenId(screenId);
+        screen.setCapacity((short) capacity);
+
+        screenRepository.save(screen);
+
+        return savedSeat;
     }
 
     public Seat getSeat(UUID id) {

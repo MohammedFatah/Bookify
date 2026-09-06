@@ -10,5 +10,5 @@ import java.util.UUID;
 
 @Repository
 public interface ScreenRepository extends JpaRepository<Screen, UUID> {
-    List<Seat> findAllByScreenId(UUID screenId);
+
 }

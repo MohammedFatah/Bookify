@@ -14,10 +14,12 @@ public class ScreenService {
 
     private final ScreenRepository screenRepository;
     private final VenueRepository venueRepository;
+    private final SeatService seatService;
 
-    public ScreenService(ScreenRepository screenRepository, VenueRepository venueRepository) {
+    public ScreenService(ScreenRepository screenRepository, VenueRepository venueRepository, SeatService seatService) {
         this.screenRepository = screenRepository;
         this.venueRepository = venueRepository;
+        this.seatService = seatService;
     }
 
     public Screen addScreen(Screen screen, UUID venueId) {
@@ -32,4 +34,17 @@ public class ScreenService {
                 .orElseThrow(() -> new ResourceNotFoundException("Screen", id));
     }
 
+    public void generateSeatsForScreen(UUID screenId, int seatsPerRow) {
+        Screen screen = screenRepository.findById(screenId)
+                .orElseThrow(() -> new ResourceNotFoundException("Screen", screenId));
+
+        int numberOfRows = (int) (double) (screen.getCapacity() / seatsPerRow);
+
+        for (int i=0; i < screen.getCapacity(); i++) {
+            char rowId = (char)('A' + i);
+            int number = i+1;
+        }
+
+//        seatService.addSeat(seat, screenId);
+    }
 }

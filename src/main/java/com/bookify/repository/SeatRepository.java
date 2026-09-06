@@ -4,9 +4,12 @@ import com.bookify.entity.Seat;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.UUID;
 
 @Repository
 public interface SeatRepository extends JpaRepository<Seat, UUID> {
     boolean existsByScreenIdAndRowIdAndNumber(UUID screenId, String rowId, Short number);
+    List<Seat> findAllByScreenId(UUID screenId);
+    long countByScreenId(UUID screenId);
 }
