@@ -2,7 +2,7 @@ package com.bookify.service;
 
 import com.bookify.entity.Screen;
 import com.bookify.entity.Venue;
-import com.bookify.exception.VenueNotFoundException;
+import com.bookify.exception.ResourceNotFoundException;
 import com.bookify.repository.ScreenRepository;
 import com.bookify.repository.VenueRepository;
 import org.springframework.stereotype.Service;
@@ -23,7 +23,7 @@ public class ScreenService {
 
     public Screen addScreen(Screen screen, UUID venueId) {
         Venue venue = venueRepository.findById(venueId)
-                .orElseThrow(() -> new VenueNotFoundException("Venue: " + venueId + " not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Venue: " + venueId + " not found"));
         screen.setVenue(venue);
         return screenRepository.save(screen);
     }
