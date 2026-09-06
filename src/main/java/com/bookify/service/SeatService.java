@@ -25,7 +25,7 @@ public class SeatService {
         boolean seatAlreadyExists = seatRepository.existsByScreenIdAndRowIdAndNumber(screenId, seat.getRowId(), seat.getNumber());
 
         if (seatAlreadyExists) {
-            throw new ResourceAlreadyExistsException("Seat" + seat.getRowId() + seat.getNumber() + " already exists on screen: " + screenId);
+            throw new ResourceAlreadyExistsException("Seat: " + seat.getRowId() + seat.getNumber() + " already exists on screen: " + screenId);
         }
 
         Screen screen = screenRepository.findById(screenId)
