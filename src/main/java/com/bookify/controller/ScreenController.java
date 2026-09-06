@@ -30,10 +30,9 @@ public class ScreenController {
                 .name(screenRequest.getName())
                 .capacity(screenRequest.getCapacity())
                 .type(screenRequest.getType())
-                .venue(Venue.builder().id(screenRequest.getVenueId()).build())
                 .build();
 
-        Screen savedScreen = screenService.addScreen(screen);
+        Screen savedScreen = screenService.addScreen(screen, screenRequest.getVenueId());
 
         ScreenResponse screenResponse = ScreenResponse
                 .builder()

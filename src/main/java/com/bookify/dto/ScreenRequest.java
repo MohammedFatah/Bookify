@@ -20,14 +20,14 @@ public class ScreenRequest {
     @NotBlank
     private String name;
 
-    @NotBlank
+    @NotNull
     private ScreenType type;
 
     @NotNull
     @Positive
     private Short capacity;
 
-    @NotBlank
+    @NotNull
     private UUID venueId;
 
 }
