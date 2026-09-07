@@ -9,8 +9,8 @@ import com.bookify.repository.MovieRepository;
 import com.bookify.repository.ScreenRepository;
 import com.bookify.repository.SeatRepository;
 import com.bookify.repository.ShowRepository;
-import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;

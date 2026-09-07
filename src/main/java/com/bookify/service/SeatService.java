@@ -6,8 +6,8 @@ import com.bookify.exception.ResourceAlreadyExistsException;
 import com.bookify.exception.ResourceNotFoundException;
 import com.bookify.repository.ScreenRepository;
 import com.bookify.repository.SeatRepository;
-import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
