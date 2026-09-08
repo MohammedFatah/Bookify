@@ -4,8 +4,6 @@ import com.bookify.entity.Seat;
 import com.bookify.entity.Show;
 import com.bookify.entity.ShowSeat;
 import com.bookify.enums.SeatStatus;
-import com.bookify.repository.SeatRepository;
-import com.bookify.repository.ShowRepository;
 import com.bookify.repository.ShowSeatRepository;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +14,7 @@ public class ShowSeatService {
 
     private final ShowSeatRepository showSeatRepository;
 
-    public ShowSeatService(ShowSeatRepository showSeatRepository, ShowRepository showRepository, SeatRepository seatRepository) {
+    public ShowSeatService(ShowSeatRepository showSeatRepository) {
         this.showSeatRepository = showSeatRepository;
     }
 

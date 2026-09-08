@@ -1,6 +1,7 @@
 package com.bookify.service;
 
 import com.bookify.entity.Screen;
+import com.bookify.entity.Seat;
 import com.bookify.entity.Venue;
 import com.bookify.exception.ResourceNotFoundException;
 import com.bookify.repository.ScreenRepository;
@@ -38,13 +39,25 @@ public class ScreenService {
         Screen screen = screenRepository.findById(screenId)
                 .orElseThrow(() -> new ResourceNotFoundException("Screen", screenId));
 
-        int numberOfRows = (int) (double) (screen.getCapacity() / seatsPerRow);
+        int screenCapacity = screen.getCapacity().intValue();
+        int numberOfRows = screenCapacity / seatsPerRow;
 
-        for (int i=0; i < screen.getCapacity(); i++) {
-            char rowId = (char)('A' + i);
-            int number = i+1;
+        Seat seat = null;
+
+        for (int i=0; i < numberOfRows; i++) {
+            for (int j=0; j < screenCapacity; j++) {
+                char rowId = (char) ('A' + i);
+                int number = j + 1;
+
+                seat = Seat.builder()
+                        .rowId(String.valueOf(rowId))
+                        .number((short) number)
+                        .screen(screen)
+                        .build();
+
+                seatService.addSeat(seat, screenId);
+            }
         }
 
-//        seatService.addSeat(seat, screenId);
     }
 }
