@@ -1,15 +1,15 @@
 package com.bookify.controller;
 
-import com.bookify.dto.ScreenRequest;
-import com.bookify.dto.ScreenResponse;
-import com.bookify.dto.VenueSummary;
+import com.bookify.dto.*;
 import com.bookify.entity.Screen;
+import com.bookify.entity.Seat;
 import com.bookify.service.ScreenService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -83,15 +83,18 @@ public class ScreenController {
     }
 
     @PostMapping("/{id}/seats/generate")
-    public ResponseEntity<ScreenResponse> generateSeatsForScreen(@PathVariable UUID id) {
-        if (id == null) {
-            return ResponseEntity.badRequest().build();
-        }
+    public ResponseEntity<SeatGenerationResponse> generateSeatsForScreen(@PathVariable UUID id, @Valid @RequestBody SeatGenerationRequest seatGenerationRequest) {
+        List<Seat> seats = screenService.generateSeatsForScreen(id, seatGenerationRequest.getSeatsPerRow());
 
-        screenService.generateSeatsForScreen(id, 20);
+        SeatGenerationResponse seatGenerationResponse = SeatGenerationResponse.builder()
+                .screenId(id)
+                .seatsPerRow(seatGenerationRequest.getSeatsPerRow())
+                .numberOfRows((int) seats.stream().map(Seat::getRowId).distinct().count())
+                .totalSeatsCreated(seats.size())
+                .build();
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(null);
+                .body(seatGenerationResponse);
     }
 }

@@ -40,8 +40,6 @@ public class SeatService {
         long capacity = seatRepository.countByScreenId(screenId);
         screen.setCapacity((short) capacity);
 
-        screenRepository.save(screen);
-
         return savedSeat;
     }
 

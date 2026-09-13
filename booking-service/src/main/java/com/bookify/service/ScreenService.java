@@ -3,24 +3,32 @@ package com.bookify.service;
 import com.bookify.entity.Screen;
 import com.bookify.entity.Seat;
 import com.bookify.entity.Venue;
+import com.bookify.enums.SeatCategory;
+import com.bookify.exception.InvalidRequestException;
+import com.bookify.exception.ResourceAlreadyExistsException;
 import com.bookify.exception.ResourceNotFoundException;
 import com.bookify.repository.ScreenRepository;
+import com.bookify.repository.SeatRepository;
 import com.bookify.repository.VenueRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Service
 public class ScreenService {
+    private static final int MAX_ROWS = 26;
 
     private final ScreenRepository screenRepository;
     private final VenueRepository venueRepository;
-    private final SeatService seatService;
+    private final SeatRepository seatRepository;
 
-    public ScreenService(ScreenRepository screenRepository, VenueRepository venueRepository, SeatService seatService) {
+    public ScreenService(ScreenRepository screenRepository, VenueRepository venueRepository, SeatRepository seatRepository) {
         this.screenRepository = screenRepository;
         this.venueRepository = venueRepository;
-        this.seatService = seatService;
+        this.seatRepository = seatRepository;
     }
 
     public Screen addScreen(Screen screen, UUID venueId) {
@@ -35,29 +43,44 @@ public class ScreenService {
                 .orElseThrow(() -> new ResourceNotFoundException("Screen", id));
     }
 
-    public void generateSeatsForScreen(UUID screenId, int seatsPerRow) {
+    @Transactional
+    public List<Seat> generateSeatsForScreen(UUID screenId, Short seatsPerRow) {
         Screen screen = screenRepository.findById(screenId)
                 .orElseThrow(() -> new ResourceNotFoundException("Screen", screenId));
 
-        int screenCapacity = screen.getCapacity().intValue();
-        int numberOfRows = screenCapacity / seatsPerRow;
-
-        Seat seat = null;
-
-        for (int i=0; i < numberOfRows; i++) {
-            for (int j=0; j < screenCapacity; j++) {
-                char rowId = (char) ('A' + i);
-                int number = j + 1;
-
-                seat = Seat.builder()
-                        .rowId(String.valueOf(rowId))
-                        .number((short) number)
-                        .screen(screen)
-                        .build();
-
-                seatService.addSeat(seat, screenId);
-            }
+        if (seatRepository.countByScreenId(screenId) > 0) {
+            throw new ResourceAlreadyExistsException("Screen " + screenId + " already has seats.");
         }
 
+        int screenCapacity = screen.getCapacity().intValue();
+        int numberOfRows = Math.ceilDivExact(screenCapacity, seatsPerRow);
+
+        if (numberOfRows > MAX_ROWS) {
+            throw new InvalidRequestException("Screen " + screenId + " can have only a maximum of " + MAX_ROWS + " rows");
+        }
+
+        SeatCategory[] seatCategories = SeatCategory.values();
+
+        List<Seat> seats = new ArrayList<>(screenCapacity);
+
+        for (int i = 0; i < screenCapacity; i++) {
+            int row = i / seatsPerRow;
+            int number = i % seatsPerRow + 1;
+            int seatCategoryIndex = row * seatCategories.length / numberOfRows;
+
+            Seat seat = Seat.builder()
+                    .rowId(String.valueOf((char) ('A' + row)))
+                    .number((short) number)
+                    .seatCategory(seatCategories[seatCategoryIndex])
+                    .screen(screen)
+                    .build();
+
+            seats.add(seat);
+        }
+
+        List<Seat> savedSeats = seatRepository.saveAll(seats);
+        screen.setCapacity((short) savedSeats.size());
+
+        return savedSeats;
     }
 }
