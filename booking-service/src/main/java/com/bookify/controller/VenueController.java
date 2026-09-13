@@ -54,6 +54,7 @@ public class VenueController {
 
         VenueResponse venueResponse = VenueResponse
                 .builder()
+                .id(id)
                 .name(venue.getName())
                 .city(venue.getCity())
                 .createdAt(venue.getCreatedAt())

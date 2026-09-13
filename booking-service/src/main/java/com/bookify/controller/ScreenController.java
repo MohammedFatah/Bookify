@@ -74,6 +74,8 @@ public class ScreenController {
                 .type(screen.getType())
                 .capacity(screen.getCapacity())
                 .venue(venueSummary)
+                .createdAt(screen.getCreatedAt())
+                .updatedAt(screen.getUpdatedAt())
                 .build();
 
         return ResponseEntity
