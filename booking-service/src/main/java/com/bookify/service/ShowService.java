@@ -11,14 +11,19 @@ import com.bookify.repository.MovieRepository;
 import com.bookify.repository.ScreenRepository;
 import com.bookify.repository.SeatRepository;
 import com.bookify.repository.ShowRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class ShowService {
 
     private final ShowRepository showRepository;
@@ -27,21 +32,6 @@ public class ShowService {
     private final SeatRepository seatRepository;
     private final ShowSeatService showSeatService;
     private final ShowCategoryPriceService showCategoryPriceService;
-
-    public ShowService(
-            ShowRepository showRepository,
-            ScreenRepository screenRepository,
-            MovieRepository movieRepository,
-            SeatRepository seatRepository,
-            ShowSeatService showSeatService,
-            ShowCategoryPriceService showCategoryPriceService) {
-        this.showRepository = showRepository;
-        this.screenRepository = screenRepository;
-        this.movieRepository = movieRepository;
-        this.showSeatService = showSeatService;
-        this.seatRepository = seatRepository;
-        this.showCategoryPriceService = showCategoryPriceService;
-    }
 
     @Transactional
     public Show addShow(Show show, UUID screenId, UUID movieId, Map<SeatCategory, BigDecimal> prices) {

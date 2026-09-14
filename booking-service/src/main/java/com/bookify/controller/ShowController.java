@@ -1,28 +1,34 @@
 package com.bookify.controller;
 
-import com.bookify.dto.*;
+import com.bookify.dto.MovieSummary;
+import com.bookify.dto.ScreenSummary;
+import com.bookify.dto.ShowCategoryPriceSummary;
+import com.bookify.dto.ShowRequest;
+import com.bookify.dto.ShowResponse;
 import com.bookify.entity.Show;
 import com.bookify.service.ShowCategoryPriceService;
 import com.bookify.service.ShowService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.UUID;
 
 @RestController
 @RequestMapping("/shows")
+@RequiredArgsConstructor
 public class ShowController {
 
     private final ShowService showService;
     private final ShowCategoryPriceService showCategoryPriceService;
-
-    public ShowController(ShowService showService, ShowCategoryPriceService showCategoryPriceService) {
-        this.showService = showService;
-        this.showCategoryPriceService = showCategoryPriceService;
-    }
 
     @PostMapping
     public ResponseEntity<ShowResponse> addShow(@Valid @RequestBody ShowRequest showRequest) {
@@ -72,10 +78,6 @@ public class ShowController {
 
     @GetMapping("/{id}")
     public ResponseEntity<ShowResponse> getShow(@PathVariable UUID id) {
-        if (id == null) {
-            return ResponseEntity.badRequest().build();
-        }
-
         Show show = showService.getShow(id);
 
         ScreenSummary screenSummary = ScreenSummary

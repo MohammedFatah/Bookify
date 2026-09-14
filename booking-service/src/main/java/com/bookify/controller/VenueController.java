@@ -5,21 +5,24 @@ import com.bookify.dto.VenueResponse;
 import com.bookify.entity.Venue;
 import com.bookify.service.VenueService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.UUID;
 
 @RestController
 @RequestMapping("/venues")
+@RequiredArgsConstructor
 public class VenueController {
 
     private final VenueService venueService;
-
-    public VenueController(VenueService venueService) {
-        this.venueService = venueService;
-    }
 
     @PostMapping
     public ResponseEntity<VenueResponse> addVenue(@Valid @RequestBody VenueRequest venueRequest) {
@@ -46,10 +49,6 @@ public class VenueController {
 
     @GetMapping("/{id}")
     public ResponseEntity<VenueResponse> getVenue(@PathVariable UUID id) {
-        if (id == null) {
-            return ResponseEntity.badRequest().build();
-        }
-
         Venue venue = venueService.getVenue(id);
 
         VenueResponse venueResponse = VenueResponse

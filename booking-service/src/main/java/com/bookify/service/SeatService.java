@@ -6,21 +6,18 @@ import com.bookify.exception.ResourceAlreadyExistsException;
 import com.bookify.exception.ResourceNotFoundException;
 import com.bookify.repository.ScreenRepository;
 import com.bookify.repository.SeatRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class SeatService {
 
     private final SeatRepository seatRepository;
     private final ScreenRepository screenRepository;
-
-    public SeatService(SeatRepository seatRepository, ScreenRepository screenRepository) {
-        this.seatRepository = seatRepository;
-        this.screenRepository = screenRepository;
-    }
 
     @Transactional
     public Seat addSeat(Seat seat, UUID screenId) {

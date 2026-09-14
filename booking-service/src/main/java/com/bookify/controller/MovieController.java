@@ -5,21 +5,24 @@ import com.bookify.dto.MovieResponse;
 import com.bookify.entity.Movie;
 import com.bookify.service.MovieService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.UUID;
 
 @RestController
 @RequestMapping("/movies")
+@RequiredArgsConstructor
 public class MovieController {
 
     private final MovieService movieService;
-
-    public MovieController(MovieService movieService) {
-        this.movieService = movieService;
-    }
 
     @PostMapping
     public ResponseEntity<MovieResponse> addMovie(@Valid @RequestBody MovieRequest movieRequest) {
@@ -47,10 +50,6 @@ public class MovieController {
 
     @GetMapping("/{id}")
     public ResponseEntity<MovieResponse> getMovie(@PathVariable UUID id) {
-        if (id == null) {
-            return ResponseEntity.badRequest().build();
-        }
-
         Movie movie = movieService.getMovie(id);
 
         MovieResponse movieResponse = MovieResponse

@@ -4,6 +4,7 @@ import com.bookify.entity.Show;
 import com.bookify.entity.ShowCategoryPrice;
 import com.bookify.enums.SeatCategory;
 import com.bookify.repository.ShowCategoryPriceRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -12,12 +13,9 @@ import java.util.Map;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class ShowCategoryPriceService {
     private final ShowCategoryPriceRepository showCategoryPriceRepository;
-
-    public ShowCategoryPriceService(ShowCategoryPriceRepository showCategoryPriceRepository) {
-        this.showCategoryPriceRepository = showCategoryPriceRepository;
-    }
 
     public void addShowCategoryPrices(Show show, Map<SeatCategory, BigDecimal> prices) {
         List<ShowCategoryPrice> showCategoryPriceList = prices.entrySet().stream()

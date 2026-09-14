@@ -10,6 +10,7 @@ import com.bookify.exception.ResourceNotFoundException;
 import com.bookify.repository.ScreenRepository;
 import com.bookify.repository.SeatRepository;
 import com.bookify.repository.VenueRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,18 +19,13 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class ScreenService {
     private static final int MAX_ROWS = 26;
 
     private final ScreenRepository screenRepository;
     private final VenueRepository venueRepository;
     private final SeatRepository seatRepository;
-
-    public ScreenService(ScreenRepository screenRepository, VenueRepository venueRepository, SeatRepository seatRepository) {
-        this.screenRepository = screenRepository;
-        this.venueRepository = venueRepository;
-        this.seatRepository = seatRepository;
-    }
 
     public Screen addScreen(Screen screen, UUID venueId) {
         Venue venue = venueRepository.findById(venueId)
