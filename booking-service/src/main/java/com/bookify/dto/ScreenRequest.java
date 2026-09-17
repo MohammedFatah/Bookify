@@ -1,0 +1,29 @@
+package com.bookify.dto;
+
+import com.bookify.enums.ScreenType;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.UUID;
+
+@Data
+@NoArgsConstructor
+public class ScreenRequest {
+
+    @NotBlank
+    private String name;
+
+    @NotNull
+    private ScreenType type;
+
+    @NotNull
+    @Positive
+    private Short capacity;
+
+    @NotNull
+    private UUID venueId;
+
+}

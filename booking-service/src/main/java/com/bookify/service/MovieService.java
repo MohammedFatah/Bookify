@@ -1,0 +1,26 @@
+package com.bookify.service;
+
+import com.bookify.entity.Movie;
+import com.bookify.exception.ResourceNotFoundException;
+import com.bookify.repository.MovieRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.UUID;
+
+@Service
+@RequiredArgsConstructor
+public class MovieService {
+
+    private final MovieRepository movieRepository;
+
+    public Movie addMovie(Movie movie) {
+        return movieRepository.save(movie);
+    }
+
+    public Movie getMovie(UUID id) {
+        return movieRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Movie", id));
+    }
+
+}

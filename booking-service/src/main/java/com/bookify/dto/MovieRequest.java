@@ -1,0 +1,20 @@
+package com.bookify.dto;
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+public class MovieRequest {
+
+    @NotBlank
+    private String title;
+
+    @NotNull
+    @Positive
+    private Short durationMinutes;
+
+}
