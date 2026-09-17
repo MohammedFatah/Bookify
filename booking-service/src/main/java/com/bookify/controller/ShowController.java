@@ -5,6 +5,8 @@ import com.bookify.dto.ScreenSummary;
 import com.bookify.dto.ShowCategoryPriceSummary;
 import com.bookify.dto.ShowRequest;
 import com.bookify.dto.ShowResponse;
+import com.bookify.dto.ShowSeatSummary;
+import com.bookify.dto.ShowSeatsResponse;
 import com.bookify.entity.Show;
 import com.bookify.service.ShowCategoryPriceService;
 import com.bookify.service.ShowService;
@@ -29,6 +31,20 @@ public class ShowController {
 
     private final ShowService showService;
     private final ShowCategoryPriceService showCategoryPriceService;
+
+    @GetMapping("/{showId}/seats")
+    public ResponseEntity<ShowSeatsResponse> getAvailableSeatsForShow(@PathVariable UUID showId) {
+        List<ShowSeatSummary> allSeatsForShow = showService.getAllSeatsForShow(showId);
+
+        ShowSeatsResponse showSeatsResponse = ShowSeatsResponse.builder()
+                .showId(showId)
+                .seats(allSeatsForShow)
+                .build();
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(showSeatsResponse);
+    }
 
     @PostMapping
     public ResponseEntity<ShowResponse> addShow(@Valid @RequestBody ShowRequest showRequest) {

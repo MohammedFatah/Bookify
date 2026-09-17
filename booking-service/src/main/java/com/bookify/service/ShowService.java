@@ -1,9 +1,8 @@
 package com.bookify.service;
 
-import com.bookify.entity.Movie;
-import com.bookify.entity.Screen;
-import com.bookify.entity.Seat;
-import com.bookify.entity.Show;
+import com.bookify.dto.SeatSummary;
+import com.bookify.dto.ShowSeatSummary;
+import com.bookify.entity.*;
 import com.bookify.enums.SeatCategory;
 import com.bookify.exception.InvalidRequestException;
 import com.bookify.exception.ResourceNotFoundException;
@@ -70,5 +69,28 @@ public class ShowService {
     public Show getShow(UUID id) {
         return showRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Show", id));
+    }
+
+    public List<ShowSeatSummary> getAllSeatsForShow(UUID showId) {
+        getShow(showId);
+
+        List<ShowSeat> showSeatsForShow = showSeatService.getShowSeatsForShow(showId);
+        List<ShowCategoryPrice> showCategoryPrices = showCategoryPriceService.getShowCategoryPrices(showId);
+
+        Map<SeatCategory, BigDecimal> priceByCategory = showCategoryPrices.stream()
+                .collect(Collectors.toUnmodifiableMap(ShowCategoryPrice::getSeatCategory, ShowCategoryPrice::getPrice));
+
+        return showSeatsForShow.stream()
+                .map(showSeat -> ShowSeatSummary.builder()
+                        .seatSummary(SeatSummary.builder()
+                                .seatId(showSeat.getSeat().getId())
+                                .rowId(showSeat.getSeat().getRowId())
+                                .number(showSeat.getSeat().getNumber())
+                                .seatCategory(showSeat.getSeat().getSeatCategory())
+                                .price(priceByCategory.getOrDefault(showSeat.getSeat().getSeatCategory(), BigDecimal.ZERO))
+                                .build())
+                        .seatStatus(showSeat.getSeatStatus())
+                        .build()
+                ).toList();
     }
 }
